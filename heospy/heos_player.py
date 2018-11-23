@@ -16,12 +16,12 @@ import argparse
 import six
 import sys
 
-import ssdp # Simple Service Discovery Protocol (SSDP), https://gist.github.com/dankrause/6000248
+from heospy import ssdp # Simple Service Discovery Protocol (SSDP), https://gist.github.com/dankrause/6000248
 
 
 # determine a default path for the config file
-DEFAULT_CONFIG_PATH = "."
-for location in os.curdir, os.path.expanduser("~/.heospy"), os.environ.get("HEOSPY_CONF"):
+DEFAULT_CONFIG_PATH = os.getcwd()
+for location in os.getcwd(), os.path.expanduser("~/.heospy"), os.environ.get("HEOSPY_CONF"):
     if location is None:
         continue
     try:
@@ -46,7 +46,7 @@ class HeosPlayer(object):
 This needs a JSON config file with a minimal content:
 
 {
-  "player_name": "Living Room",
+  "player_name": "Heos",
   "user": "me@example.com",
   "pw": "do-not-use-qwerty-as-password"
 }
