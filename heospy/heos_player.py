@@ -2,6 +2,7 @@
 """
 Rewritten version of heos_player from ping13.
 interface & commands: http://rn.dmglobal.com/euheos/HEOS_CLI_ProtocolSpecification.pdf
+
 """
 
 import os
@@ -42,7 +43,6 @@ class HeosPlayer(object):
     player_name: str
     user: str
     pw: str
-    login: tuple
     host: str
     pid: str
 
@@ -197,3 +197,26 @@ class HeosPlayer(object):
             if player.get("name") == name:
                 return player.get("pid")
         return None
+
+    def login(self, user="", pw=""):
+            # fist check if we're already signed in: get the currently signed in
+            # user from the system
+        signed_in_message = self.telnet_request(
+            "system/check_account").get("heos", {}).get("message", "")
+        is_signed_in = "signed_in&" in signed_in_message
+
+        if is_signed_in:
+                # if signed in, we should also have the same user here.
+            signed_in_user = signed_in_message.split("&")[1][3:]
+            if signed_in_user == user:
+                logging.info("Already signed in as {}".format(signed_in_user))
+                return True
+            else:
+                logging.info("user '{}' is different from '{}'".format(
+                    signed_in_user, user))
+
+        # At this point, it seems as if we have to really sign in, which takes
+        # a second or two...
+        logging.info(
+            "Need to sign in as {} to have access to favorites etc.".format(user))
+        return self.telnet_request("system/sign_in?un={}&pw={}".format(user, pw))

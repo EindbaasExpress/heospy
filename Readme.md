@@ -2,7 +2,7 @@
 
 ## Requirements
 
-You have an [HEOS][] speaker in your local network and Python 2.7 or
+You have an [HEOS][] speaker in your local network and
 Python 3.
 
 ## Usage

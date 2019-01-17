@@ -73,4 +73,8 @@ if (response.st == URN_SCHEMA):
     host = re.match(r"http:..([^\:]+):", response.location).group(1)
     telnet = telnetlib.Telnet(host, 1255)
     pid = _get_player(player_name)
-logging.debug(host, telnet, pid)
+    print(host, telnet, pid)
+# logging.debug(host, telnet, pid)
+
+telnet_request("heos://player/get_players")
+telnet_request("system/heart_beat")
